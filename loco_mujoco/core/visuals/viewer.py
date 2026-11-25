@@ -239,7 +239,7 @@ class MujocoViewer:
         else:
             action = mujoco.mjtMouse.mjMOUSE_ZOOM
 
-        mujoco.mjv_moveCamera(self._model, action, dx / width, dy / height, self._scene, self._camera)
+        mujoco.mjv_moveCamera(self._model, action, dx / width, dy / height, self._camera)
 
     def keyboard(self, window, key, scancode, act, mods):
         """

@@ -149,6 +149,7 @@ class TrajectoryInfo:
         j_qvel = 0
         for i, item in enumerate(zip(self.joint_names, self.model.jnt_type)):
             j_name, j_type = item
+            j_type = int(j_type)
             if j_type == mujoco.mjtJoint.mjJNT_FREE:
                 self.joint_name2ind_qpos[j_name] = np.arange(j_qpos, j_qpos + 7)
                 self.joint_name2ind_qvel[j_name] = np.arange(j_qvel, j_qvel + 6)

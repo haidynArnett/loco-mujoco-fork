@@ -43,7 +43,7 @@ Key Advantages
 
 - ✅ Supports **MuJoCo** (single) and **MJX** (parallel) environments
 - ✅ Includes **12 humanoid + 4 quadruped environments**, with **4 biomechanical human models**
-- ✅ Clean, single-file **JAX algorithms**: PPO, GAIL, AMP, DeepMimic
+- ✅ Clean, single-file **JAX algorithms**: PPO, GAIL, InfoGAIL, AMP, DeepMimic
 - ✅ **22,000+ motion capture datasets** (AMASS, LAFAN1, native)
 - ✅ **Robot-to-robot retargeting**
 - ✅ Trajectory comparison metrics (e.g., DTW, Fréchet distance) implemented in **JAX**

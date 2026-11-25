@@ -34,6 +34,15 @@ experiment:
   disc_minibatch_size: 2048
   proportion_env_reward: 0.0
   n_disc_epochs: 10
+  # InfoGAIL only
+  n_codes: 2
+  info_coef: 1.0
+  disc_reward_scale: 1.0
+  reward_bias: 2.0
+  wgan_clip: 0.01
+  posterior_lr: 1e-4
+  n_post_epochs: 10
+  post_minibatch_size: 2048
   num_minibatches: 32
   gamma: 0.99
   gae_lambda: 0.95

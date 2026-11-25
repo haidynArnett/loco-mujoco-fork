@@ -3,10 +3,13 @@ from jax import make_jaxpr
 from omegaconf import open_dict
 
 from loco_mujoco import TaskFactory
-from loco_mujoco.algorithms import PPOJax, GAILJax, AMPJax
+from loco_mujoco.algorithms import PPOJax, GAILJax, InfoGAILJax, AMPJax
 from loco_mujoco.utils import MetricsHandler
 
 from test_conf import *
+
+
+IMITATION_ALGORITHMS = {"GAIL": GAILJax, "InfoGAIL": InfoGAILJax, "AMP": AMPJax}
 
 
 # Set Jax-backend to CPU
@@ -86,10 +89,10 @@ def test_PPO_save_and_load_agent(ppo_rl_config, tmp_path):
     assert _params_allclose(agent_state.train_state.run_stats, loaded_state.train_state.run_stats)
 
 
-@pytest.mark.parametrize("algorithm", ("GAIL", "AMP"))
+@pytest.mark.parametrize("algorithm", ("GAIL", "InfoGAIL", "AMP"))
 def test_Imitation_save_and_load_agent(algorithm, imitation_config, tmp_path):
     """Train imitation agent for a few steps, save, load, and verify params match."""
-    alg_cls = GAILJax if algorithm == "GAIL" else AMPJax
+    alg_cls = IMITATION_ALGORITHMS[algorithm]
     config = OmegaConf.create(OmegaConf.to_container(imitation_config, resolve=True))
     with open_dict(config.experiment):
         config.experiment.total_timesteps = 64
@@ -126,12 +129,15 @@ def test_Imitation_save_and_load_agent(algorithm, imitation_config, tmp_path):
     assert _params_allclose(agent_state.train_state.run_stats, loaded_state.train_state.run_stats)
     assert _params_allclose(agent_state.disc_train_state.params, loaded_state.disc_train_state.params)
     assert _params_allclose(agent_state.disc_train_state.run_stats, loaded_state.disc_train_state.run_stats)
+    if algorithm == "InfoGAIL":
+        assert _params_allclose(agent_state.post_train_state.params, loaded_state.post_train_state.params)
+        assert _params_allclose(agent_state.post_train_state.run_stats, loaded_state.post_train_state.run_stats)
 
 
-@pytest.mark.parametrize("algorithm", ("GAIL", "AMP"))
+@pytest.mark.parametrize("algorithm", ("GAIL", "InfoGAIL", "AMP"))
 def test_Imitation_Jax_build_train_fn(algorithm, imitation_config):
 
-    alg_cls = GAILJax if algorithm == "GAIL" else AMPJax
+    alg_cls = IMITATION_ALGORITHMS[algorithm]
 
     config = imitation_config
 
